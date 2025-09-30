@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elarion Wiki</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Manifesto para PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f0f0f">
+
+  <!-- Ícones -->
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+</head>
+<body>
+  <header>
+    <h1>📖 Elarion Wiki</h1>
+    <input type="text" id="search" placeholder="Buscar personagens, reinos, clãs...">
+  </header>
+
+  <!-- Formulário de cadastro -->
+  <section id="form-section">
+    <h2>Adicionar novo item</h2>
+    <form id="add-form">
+      <input type="text" id="nome" placeholder="Nome" required>
+      <input type="text" id="tipo" placeholder="Tipo (Reino, Clã, Personagem...)" required>
+      <textarea id="resumo" placeholder="Resumo"></textarea>
+      <button type="submit">Adicionar</button>
+    </form>
+  </section>
+
+  <!-- Área de cards -->
+  <main id="content"></main>
+
+  <footer>
+    <p>⚡ Enciclopédia de Elarion — Powered by Lorenzo & Chat</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+</body>
+</html>
