@@ -11,7 +11,7 @@
   <meta name="theme-color" content="#0f0f0f">
 
   <!-- Ícones -->
-  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="icon" href="icon-192.png" type="image/png">
 </head>
 <body>
   <header>
@@ -32,6 +32,20 @@
 
   <!-- Área de cards -->
   <main id="content"></main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <h2>Editar item</h2>
+      <form id="edit-form">
+        <input type="text" id="edit-nome" placeholder="Nome" required>
+        <input type="text" id="edit-tipo" placeholder="Tipo" required>
+        <textarea id="edit-resumo" placeholder="Resumo"></textarea>
+        <button type="submit">Salvar alterações</button>
+      </form>
+    </div>
+  </div>
 
   <footer>
     <p>⚡ Enciclopédia de Elarion — Powered by Lorenzo & Chat</p>
