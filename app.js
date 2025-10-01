@@ -15,19 +15,82 @@ const content = document.getElementById("content");
 const searchInput = document.getElementById("search");
 const addForm = document.getElementById("add-form");
 
+// Modal
+const modal = document.getElementById("modal");
+const closeModal = document.getElementById("close-modal");
+const editForm = document.getElementById("edit-form");
+const editNome = document.getElementById("edit-nome");
+const editTipo = document.getElementById("edit-tipo");
+const editResumo = document.getElementById("edit-resumo");
+
+let editingIndex = null;
+
 // Renderizar cards
 function render(list) {
   content.innerHTML = "";
-  list.forEach(item => {
+  list.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
+      <button class="delete-btn" data-index="${index}">Excluir</button>
       <h2>${item.nome}</h2>
       <p><strong>${item.tipo}</strong></p>
       <p>${item.resumo}</p>
     `;
+    // Clicar no card abre modal (mas não no botão excluir)
+    card.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("delete-btn")) {
+        openModal(index);
+      }
+    });
     content.appendChild(card);
   });
+
+  // Botões excluir
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation(); // impedir abrir modal
+      const index = btn.dataset.index;
+      data.splice(index, 1);
+      saveData();
+      render(data);
+    });
+  });
+}
+
+// Abrir modal
+function openModal(index) {
+  editingIndex = index;
+  const item = data[index];
+  editNome.value = item.nome;
+  editTipo.value = item.tipo;
+  editResumo.value = item.resumo;
+  modal.style.display = "flex";
+}
+
+// Fechar modal
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// Editar item
+editForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (editingIndex !== null) {
+    data[editingIndex] = {
+      nome: editNome.value,
+      tipo: editTipo.value,
+      resumo: editResumo.value
+    };
+    saveData();
+    render(data);
+    modal.style.display = "none";
+  }
+});
+
+// Salvar no localStorage
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 // Inicial
@@ -54,9 +117,7 @@ addForm.addEventListener("submit", (e) => {
   const novoItem = { nome, tipo, resumo };
   data.push(novoItem);
 
-  // Salvar no localStorage
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
+  saveData();
   addForm.reset();
   render(data);
 });
