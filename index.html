@@ -19,30 +19,65 @@
     <input type="text" id="search" placeholder="Buscar personagens, reinos, clãs...">
   </header>
 
-    <!-- CONTROLES -->
-    <section id="controls">
-      <div class="filters">
-        <button class="filter-btn" data-filter="all">Tudo</button>
-        <button class="filter-btn" data-filter="Reino">Reinos</button>
-        <button class="filter-btn" data-filter="Clã">Clãs</button>
-        <button class="filter-btn" data-filter="Personagem">Personagens</button>
-        <button class="filter-btn" data-filter="Evento">Eventos</button>
-      </div>
+  <!-- CONTROLES -->
+  <section id="controls">
+    <div class="filters">
+      <button class="filter-btn" data-filter="all">Tudo</button>
+      <button class="filter-btn" data-filter="Reino">Reinos</button>
+      <button class="filter-btn" data-filter="Clã">Clãs</button>
+      <button class="filter-btn" data-filter="Personagem">Personagens</button>
+      <button class="filter-btn" data-filter="Evento">Eventos</button>
+    </div>
 
-      <div class="io">
-        <button id="export-btn">Exportar JSON</button>
-        <label for="import-input" class="import-label">Importar JSON</label>
-        <input type="file" id="import-input" accept="application/json" hidden>
-      </div>
-    </section>
+    <div class="io">
+      <select id="sort">
+        <option value="az">A–Z (nome)</option>
+        <option value="za">Z–A (nome)</option>
+        <option value="recent">Mais recentes</option>
+      </select>
+
+      <button id="export-btn">Exportar JSON</button>
+      <label for="import-input" class="import-label">Importar JSON</label>
+      <input type="file" id="import-input" accept="application/json" hidden>
+    </div>
+  </section>
 
   <!-- Formulário de cadastro -->
   <section id="form-section">
     <h2>Adicionar novo item</h2>
     <form id="add-form">
       <input type="text" id="nome" placeholder="Nome" required>
-      <input type="text" id="tipo" placeholder="Tipo (Reino, Clã, Personagem, Evento)" required>
+
+      <!-- Troquei para select (mais prático e evita erro de digitação) -->
+      <select id="tipo" required>
+        <option value="" disabled selected>Tipo</option>
+        <option>Reino</option>
+        <option>Clã</option>
+        <option>Personagem</option>
+        <option>Evento</option>
+      </select>
+
       <textarea id="resumo" placeholder="Resumo"></textarea>
+
+      <!-- Campos dinâmicos por tipo -->
+      <div class="bytype" data-for="Reino">
+        <input type="text" id="add-reino-continente" placeholder="Continente">
+      </div>
+
+      <div class="bytype" data-for="Clã">
+        <input type="text" id="add-cla-origem" placeholder="Origem">
+      </div>
+
+      <div class="bytype" data-for="Personagem">
+        <input type="text" id="add-personagem-reino" placeholder="Reino (texto livre)">
+        <input type="text" id="add-personagem-cla" placeholder="Clã (texto livre)">
+      </div>
+
+      <div class="bytype" data-for="Evento">
+        <input type="text" id="add-evento-data" placeholder="Data (ex: 1023-05-12)">
+        <input type="text" id="add-evento-local" placeholder="Local (texto livre)">
+      </div>
+
       <button type="submit">Adicionar</button>
     </form>
   </section>
@@ -50,15 +85,42 @@
   <!-- Área de cards -->
   <main id="content"></main>
 
-  <!-- Modal -->
+  <!-- Modal de Edição -->
   <div id="modal" class="modal">
     <div class="modal-content">
       <span id="close-modal" class="close">&times;</span>
       <h2>Editar item</h2>
       <form id="edit-form">
         <input type="text" id="edit-nome" placeholder="Nome" required>
-        <input type="text" id="edit-tipo" placeholder="Tipo" required>
+
+        <select id="edit-tipo" required>
+          <option>Reino</option>
+          <option>Clã</option>
+          <option>Personagem</option>
+          <option>Evento</option>
+        </select>
+
         <textarea id="edit-resumo" placeholder="Resumo"></textarea>
+
+        <!-- Campos dinâmicos por tipo (modal) -->
+        <div class="bytype-edit" data-for="Reino">
+          <input type="text" id="edit-reino-continente" placeholder="Continente">
+        </div>
+
+        <div class="bytype-edit" data-for="Clã">
+          <input type="text" id="edit-cla-origem" placeholder="Origem">
+        </div>
+
+        <div class="bytype-edit" data-for="Personagem">
+          <input type="text" id="edit-personagem-reino" placeholder="Reino (texto livre)">
+          <input type="text" id="edit-personagem-cla" placeholder="Clã (texto livre)">
+        </div>
+
+        <div class="bytype-edit" data-for="Evento">
+          <input type="text" id="edit-evento-data" placeholder="Data (ex: 1023-05-12)">
+          <input type="text" id="edit-evento-local" placeholder="Local (texto livre)">
+        </div>
+
         <button type="submit">Salvar alterações</button>
       </form>
     </div>
