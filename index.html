@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f0f0f">
 
-  <!-- Ícones -->
+  <!-- Ícone -->
   <link rel="icon" href="icon-192.png" type="image/png">
 </head>
 <body>
@@ -19,12 +19,29 @@
     <input type="text" id="search" placeholder="Buscar personagens, reinos, clãs...">
   </header>
 
+    <!-- CONTROLES -->
+    <section id="controls">
+      <div class="filters">
+        <button class="filter-btn" data-filter="all">Tudo</button>
+        <button class="filter-btn" data-filter="Reino">Reinos</button>
+        <button class="filter-btn" data-filter="Clã">Clãs</button>
+        <button class="filter-btn" data-filter="Personagem">Personagens</button>
+        <button class="filter-btn" data-filter="Evento">Eventos</button>
+      </div>
+
+      <div class="io">
+        <button id="export-btn">Exportar JSON</button>
+        <label for="import-input" class="import-label">Importar JSON</label>
+        <input type="file" id="import-input" accept="application/json" hidden>
+      </div>
+    </section>
+
   <!-- Formulário de cadastro -->
   <section id="form-section">
     <h2>Adicionar novo item</h2>
     <form id="add-form">
       <input type="text" id="nome" placeholder="Nome" required>
-      <input type="text" id="tipo" placeholder="Tipo (Reino, Clã, Personagem...)" required>
+      <input type="text" id="tipo" placeholder="Tipo (Reino, Clã, Personagem, Evento)" required>
       <textarea id="resumo" placeholder="Resumo"></textarea>
       <button type="submit">Adicionar</button>
     </form>
