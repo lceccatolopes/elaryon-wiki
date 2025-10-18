@@ -75,6 +75,14 @@ header input {
   align-items: center;
 }
 
+#sort, #add-form select, #edit-form select {
+  background: #1f1f1f;
+  color: #f5f5f5;
+  border: 1px solid #2a2a2a;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+}
+
 #export-btn, .import-label {
   background: #6cf;
   color: #0a0a0a;
@@ -119,6 +127,9 @@ header input {
   color: #f5f5f5;
 }
 
+.bytype, .bytype-edit { display: none; gap: 0.6rem; flex-direction: column; }
+.bytype.show, .bytype-edit.show { display: flex; }
+
 #add-form button {
   background: #6cf;
   border: none;
@@ -155,10 +166,8 @@ main {
   box-shadow: 0 8px 25px rgba(0,0,0,0.7);
 }
 
-.card h2 {
-  margin-bottom: 0.5rem;
-  color: #6cf;
-}
+.card h2 { margin-bottom: 0.5rem; color: #6cf; }
+.card .meta { margin-top: 0.4rem; font-size: 0.9rem; color: #c9e6ff; }
 
 .delete-btn {
   position: absolute;
@@ -173,10 +182,7 @@ main {
   font-size: 0.8rem;
   transition: 0.2s;
 }
-
-.delete-btn:hover {
-  background: darkred;
-}
+.delete-btn:hover { background: darkred; }
 
 footer {
   text-align: center;
@@ -242,7 +248,4 @@ footer {
   cursor: pointer;
   transition: 0.2s;
 }
-
-#edit-form button:hover {
-  background: #4aa;
-}
+#edit-form button:hover { background: #4aa; }
