@@ -36,6 +36,59 @@ header input {
   outline: none;
 }
 
+/* CONTROLES (filtros e import/export) */
+#controls {
+  margin: 0.8rem auto 0;
+  width: 92%;
+  max-width: 900px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-btn {
+  background: #1f1f1f;
+  border: 1px solid #2a2a2a;
+  color: #cfcfcf;
+  padding: 0.5rem 0.7rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.filter-btn.active {
+  background: #6cf;
+  color: #0a0a0a;
+  border-color: #5ac2f0;
+}
+
+.io {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#export-btn, .import-label {
+  background: #6cf;
+  color: #0a0a0a;
+  border: none;
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.import-label {
+  background: #805ad5;
+  color: white;
+}
+
 #form-section {
   background: #1a1a1a;
   margin: 1rem auto;
@@ -150,9 +203,10 @@ footer {
   background: #1a1a1a;
   padding: 2rem;
   border-radius: 12px;
-  max-width: 400px;
-  width: 90%;
+  max-width: 420px;
+  width: 92%;
   box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+  position: relative;
 }
 
 .close {
