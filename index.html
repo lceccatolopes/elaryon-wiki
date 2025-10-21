@@ -16,7 +16,7 @@
 <body>
   <header>
     <h1>📖 Elarion Wiki</h1>
-    <input type="text" id="search" placeholder="Buscar personagens, reinos, clãs...">
+    <input type="text" id="search" placeholder="Buscar personagens, reinos, clãs, poderes, eventos...">
   </header>
 
   <!-- CONTROLES -->
@@ -26,6 +26,7 @@
       <button class="filter-btn" data-filter="Reino">Reinos</button>
       <button class="filter-btn" data-filter="Clã">Clãs</button>
       <button class="filter-btn" data-filter="Personagem">Personagens</button>
+      <button class="filter-btn" data-filter="Poder">Poderes</button>
       <button class="filter-btn" data-filter="Evento">Eventos</button>
     </div>
 
@@ -48,12 +49,12 @@
     <form id="add-form">
       <input type="text" id="nome" placeholder="Nome" required>
 
-      <!-- Troquei para select (mais prático e evita erro de digitação) -->
       <select id="tipo" required>
         <option value="" disabled selected>Tipo</option>
         <option>Reino</option>
         <option>Clã</option>
         <option>Personagem</option>
+        <option>Poder</option>
         <option>Evento</option>
       </select>
 
@@ -71,6 +72,11 @@
       <div class="bytype" data-for="Personagem">
         <input type="text" id="add-personagem-reino" placeholder="Reino (texto livre)">
         <input type="text" id="add-personagem-cla" placeholder="Clã (texto livre)">
+      </div>
+
+      <div class="bytype" data-for="Poder">
+        <input type="text" id="add-poder-categoria" placeholder="Categoria (ex: visual, rúnico)">
+        <input type="text" id="add-poder-ranking" placeholder="Ranking (ex: ancestral, mestre)">
       </div>
 
       <div class="bytype" data-for="Evento">
@@ -97,6 +103,7 @@
           <option>Reino</option>
           <option>Clã</option>
           <option>Personagem</option>
+          <option>Poder</option>
           <option>Evento</option>
         </select>
 
@@ -114,6 +121,11 @@
         <div class="bytype-edit" data-for="Personagem">
           <input type="text" id="edit-personagem-reino" placeholder="Reino (texto livre)">
           <input type="text" id="edit-personagem-cla" placeholder="Clã (texto livre)">
+        </div>
+
+        <div class="bytype-edit" data-for="Poder">
+          <input type="text" id="edit-poder-categoria" placeholder="Categoria (ex: visual, rúnico)">
+          <input type="text" id="edit-poder-ranking" placeholder="Ranking (ex: ancestral, mestre)">
         </div>
 
         <div class="bytype-edit" data-for="Evento">
