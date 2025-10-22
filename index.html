@@ -16,7 +16,7 @@
 <body>
   <header>
     <h1>📖 Elarion Wiki</h1>
-    <input type="text" id="search" placeholder="Buscar personagens, reinos, clãs, poderes, eventos...">
+    <input type="text" id="search" placeholder="Buscar personagens, reinos, clãs, poderes, eventos, lore...">
   </header>
 
   <!-- CONTROLES -->
@@ -28,6 +28,7 @@
       <button class="filter-btn" data-filter="Personagem">Personagens</button>
       <button class="filter-btn" data-filter="Poder">Poderes</button>
       <button class="filter-btn" data-filter="Evento">Eventos</button>
+      <button class="filter-btn" data-filter="Lore">Lore</button>
     </div>
 
     <div class="io">
@@ -56,9 +57,10 @@
         <option>Personagem</option>
         <option>Poder</option>
         <option>Evento</option>
+        <option>Lore</option>
       </select>
 
-      <textarea id="resumo" placeholder="Resumo"></textarea>
+      <textarea id="resumo" placeholder="Resumo (opcional)"></textarea>
 
       <!-- Campos dinâmicos por tipo -->
       <div class="bytype" data-for="Reino">
@@ -84,6 +86,19 @@
         <input type="text" id="add-evento-local" placeholder="Local (texto livre)">
       </div>
 
+      <div class="bytype" data-for="Lore">
+        <select id="add-lore-alvo-tipo">
+          <option value="" disabled selected>Alvo: Tipo</option>
+          <option>Personagem</option>
+          <option>Reino</option>
+          <option>Clã</option>
+          <option>Poder</option>
+          <option>Evento</option>
+        </select>
+        <input type="text" id="add-lore-alvo-nome" placeholder="Alvo: Nome">
+        <textarea id="add-lore-texto" placeholder="Texto do lore (história detalhada)"></textarea>
+      </div>
+
       <button type="submit">Adicionar</button>
     </form>
   </section>
@@ -105,9 +120,10 @@
           <option>Personagem</option>
           <option>Poder</option>
           <option>Evento</option>
+          <option>Lore</option>
         </select>
 
-        <textarea id="edit-resumo" placeholder="Resumo"></textarea>
+        <textarea id="edit-resumo" placeholder="Resumo (opcional)"></textarea>
 
         <!-- Campos dinâmicos por tipo (modal) -->
         <div class="bytype-edit" data-for="Reino">
@@ -131,6 +147,18 @@
         <div class="bytype-edit" data-for="Evento">
           <input type="text" id="edit-evento-data" placeholder="Data (ex: 1023-05-12)">
           <input type="text" id="edit-evento-local" placeholder="Local (texto livre)">
+        </div>
+
+        <div class="bytype-edit" data-for="Lore">
+          <select id="edit-lore-alvo-tipo">
+            <option>Personagem</option>
+            <option>Reino</option>
+            <option>Clã</option>
+            <option>Poder</option>
+            <option>Evento</option>
+          </select>
+          <input type="text" id="edit-lore-alvo-nome" placeholder="Alvo: Nome">
+          <textarea id="edit-lore-texto" placeholder="Texto do lore"></textarea>
         </div>
 
         <button type="submit">Salvar alterações</button>
