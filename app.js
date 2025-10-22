@@ -1,21 +1,22 @@
 const STORAGE_KEY = "elarion-data";
 
-// Dados iniciais
+// Dados iniciais (inclui um exemplo de Lore)
 const defaultData = [
-  { tipo: "Reino", nome: "Arcan", resumo: "Antigo vilarejo que cresceu até tornar-se reino.", continente: "Varyon", _ts: Date.now()-4 },
-  { tipo: "Clã", nome: "Arcanyth", resumo: "Família marcada por poder mágico ancestral.", origem: "Mytheras", _ts: Date.now()-3 },
-  { tipo: "Personagem", nome: "Theodore Wolff", resumo: "Primeiro General de Arcan, criado por lobos.", reinoRef: "Arcan", claRef: "Arcanyth", _ts: Date.now()-2 },
-  { tipo: "Poder", nome: "Olhos da Fúria", resumo: "Amplifica atributos de combate em explosões controladas.", categoria: "visual", ranking: "ancestral", _ts: Date.now()-1 },
-  { tipo: "Evento", nome: "Guerra de Varyon", resumo: "Conflito histórico nas fronteiras sombrias.", data: "1023-05-12", local: "Arcan", _ts: Date.now() }
+  { tipo: "Reino", nome: "Arcan", resumo: "Antigo vilarejo que cresceu até tornar-se reino.", continente: "Varyon", _ts: Date.now()-5 },
+  { tipo: "Clã", nome: "Arcanyth", resumo: "Família marcada por poder mágico ancestral.", origem: "Mytheras", _ts: Date.now()-4 },
+  { tipo: "Personagem", nome: "Theodore Wolff", resumo: "Primeiro General de Arcan, criado por lobos.", reinoRef: "Arcan", claRef: "Arcanyth", _ts: Date.now()-3 },
+  { tipo: "Poder", nome: "Olhos da Fúria", resumo: "Amplifica atributos de combate em explosões controladas.", categoria: "visual", ranking: "ancestral", _ts: Date.now()-2 },
+  { tipo: "Evento", nome: "Guerra de Varyon", resumo: "Conflito histórico nas fronteiras sombrias.", data: "1023-05-12", local: "Arcan", _ts: Date.now()-1 },
+  { tipo: "Lore", nome: "Origem do Lobo Branco", resumo: "Os sussurros sobre a linhagem oculta.", alvoTipo: "Personagem", alvoNome: "Theodore Wolff", lore: "Dizem que nas noites de lua nova, o Lobo Branco vagueia entre os pinheiros de Arcan, guiando aqueles de sangue antigo.", _ts: Date.now() }
 ];
 
 // Carregar do localStorage ou usar padrão
 let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
-// Normaliza: garante timestamp
+// Normaliza timestamp
 data = data.map((it, i) => ({ _ts: it._ts ?? (Date.now() - (data.length - i)), ...it }));
 
 // Estado de UI
-let currentFilter = "all"; // all | Reino | Clã | Personagem | Poder | Evento
+let currentFilter = "all"; // all | Reino | Clã | Personagem | Poder | Evento | Lore
 let currentSort = "az";    // az | za | recent
 let editingIndex = null;
 
@@ -27,14 +28,17 @@ const tipoSelect = document.getElementById("tipo");
 const sortSelect = document.getElementById("sort");
 
 // Campos adicionais (add)
-const addReinoContinente = document.getElementById("add-reino-continente");
-const addClaOrigem = document.getElementById("add-cla-origem");
-const addPersReino = document.getElementById("add-personagem-reino");
-const addPersCla = document.getElementById("add-personagem-cla");
-const addPoderCategoria = document.getElementById("add-poder-categoria");
-const addPoderRanking = document.getElementById("add-poder-ranking");
-const addEventoData = document.getElementById("add-evento-data");
-const addEventoLocal = document.getElementById("add-evento-local");
+const addReinoContinente   = document.getElementById("add-reino-continente");
+const addClaOrigem         = document.getElementById("add-cla-origem");
+const addPersReino         = document.getElementById("add-personagem-reino");
+const addPersCla           = document.getElementById("add-personagem-cla");
+const addPoderCategoria    = document.getElementById("add-poder-categoria");
+const addPoderRanking      = document.getElementById("add-poder-ranking");
+const addEventoData        = document.getElementById("add-evento-data");
+const addEventoLocal       = document.getElementById("add-evento-local");
+const addLoreAlvoTipo      = document.getElementById("add-lore-alvo-tipo");
+const addLoreAlvoNome      = document.getElementById("add-lore-alvo-nome");
+const addLoreTexto         = document.getElementById("add-lore-texto");
 
 // Modal
 const modal = document.getElementById("modal");
@@ -45,14 +49,17 @@ const editTipo = document.getElementById("edit-tipo");
 const editResumo = document.getElementById("edit-resumo");
 
 // Campos adicionais (edit)
-const editReinoContinente = document.getElementById("edit-reino-continente");
-const editClaOrigem = document.getElementById("edit-cla-origem");
-const editPersReino = document.getElementById("edit-personagem-reino");
-const editPersCla = document.getElementById("edit-personagem-cla");
-const editPoderCategoria = document.getElementById("edit-poder-categoria");
-const editPoderRanking = document.getElementById("edit-poder-ranking");
-const editEventoData = document.getElementById("edit-evento-data");
-const editEventoLocal = document.getElementById("edit-evento-local");
+const editReinoContinente  = document.getElementById("edit-reino-continente");
+const editClaOrigem        = document.getElementById("edit-cla-origem");
+const editPersReino        = document.getElementById("edit-personagem-reino");
+const editPersCla          = document.getElementById("edit-personagem-cla");
+const editPoderCategoria   = document.getElementById("edit-poder-categoria");
+const editPoderRanking     = document.getElementById("edit-poder-ranking");
+const editEventoData       = document.getElementById("edit-evento-data");
+const editEventoLocal      = document.getElementById("edit-evento-local");
+const editLoreAlvoTipo     = document.getElementById("edit-lore-alvo-tipo");
+const editLoreAlvoNome     = document.getElementById("edit-lore-alvo-nome");
+const editLoreTexto        = document.getElementById("edit-lore-texto");
 
 // Import/Export
 const exportBtn = document.getElementById("export-btn");
@@ -86,7 +93,10 @@ function getFilteredAndSearched() {
       (item.categoria||"").toLowerCase().includes(q) ||
       (item.ranking||"").toLowerCase().includes(q) ||
       (item.data||"").toLowerCase().includes(q) ||
-      (item.local||"").toLowerCase().includes(q)
+      (item.local||"").toLowerCase().includes(q) ||
+      (item.alvoTipo||"").toLowerCase().includes(q) ||
+      (item.alvoNome||"").toLowerCase().includes(q) ||
+      (item.lore||"").toLowerCase().includes(q)
     );
 
   // Ordenação
@@ -110,7 +120,7 @@ function render(list = getFilteredAndSearched()) {
     if (item.tipo === "Clã" && item.origem) extra += `<div class="meta">🏷️ Origem: ${item.origem}</div>`;
     if (item.tipo === "Personagem") {
       if (item.reinoRef) extra += `<div class="meta">🏰 Reino: ${item.reinoRef}</div>`;
-      if (item.claRef) extra += `<div class="meta">🐺 Clã: ${item.claRef}</div>`;
+      if (item.claRef)  extra += `<div class="meta">🐺 Clã: ${item.claRef}</div>`;
     }
     if (item.tipo === "Poder") {
       if (item.categoria) extra += `<div class="meta">✨ Categoria: ${item.categoria}</div>`;
@@ -119,6 +129,11 @@ function render(list = getFilteredAndSearched()) {
     if (item.tipo === "Evento") {
       if (item.data)  extra += `<div class="meta">📅 Data: ${item.data}</div>`;
       if (item.local) extra += `<div class="meta">📍 Local: ${item.local}</div>`;
+    }
+    if (item.tipo === "Lore") {
+      const alvo = [item.alvoTipo, item.alvoNome].filter(Boolean).join(" — ");
+      if (alvo) extra += `<div class="meta">🎯 Alvo: ${alvo}</div>`;
+      if (item.lore) extra += `<div class="meta">📜 Trecho: ${(item.lore||"").slice(0,100)}...</div>`;
     }
 
     card.innerHTML = `
@@ -172,6 +187,9 @@ function openModal(index) {
   editPoderRanking.value = it.ranking || "";
   editEventoData.value = it.data || "";
   editEventoLocal.value = it.local || "";
+  editLoreAlvoTipo.value = it.alvoTipo || "Personagem";
+  editLoreAlvoNome.value = it.alvoNome || "";
+  editLoreTexto.value = it.lore || "";
 
   modal.style.display = "flex";
 }
@@ -186,32 +204,37 @@ editTipo.addEventListener("change", () => {
 });
 
 // Editar item
-editForm.addEventListener("submit", (e) => {
+document.getElementById("edit-form").addEventListener("submit", (e) => {
   e.preventDefault();
   if (editingIndex !== null && editingIndex >= 0) {
     const base = {
       _ts: data[editingIndex]._ts || Date.now(),
-      nome: editNome.value.trim(),
+      nome: (editNome.value || "").trim(),
       tipo: editTipo.value,
-      resumo: editResumo.value.trim()
+      resumo: (editResumo.value || "").trim()
     };
 
-    // Limpa extras
-    ["continente","origem","reinoRef","claRef","categoria","ranking","data","local"].forEach(k=> delete base[k]);
+    // Limpa extras e seta conforme tipo
+    ["continente","origem","reinoRef","claRef","categoria","ranking","data","local","alvoTipo","alvoNome","lore"].forEach(k=> delete base[k]);
 
-    if (editTipo.value === "Reino") base.continente = editReinoContinente.value.trim();
-    if (editTipo.value === "Clã") base.origem = editClaOrigem.value.trim();
+    if (editTipo.value === "Reino") base.continente = (editReinoContinente.value||"").trim();
+    if (editTipo.value === "Clã") base.origem = (editClaOrigem.value||"").trim();
     if (editTipo.value === "Personagem") {
-      base.reinoRef = editPersReino.value.trim();
-      base.claRef = editPersCla.value.trim();
+      base.reinoRef = (editPersReino.value||"").trim();
+      base.claRef = (editPersCla.value||"").trim();
     }
     if (editTipo.value === "Poder") {
-      base.categoria = editPoderCategoria.value.trim();
-      base.ranking   = editPoderRanking.value.trim();
+      base.categoria = (editPoderCategoria.value||"").trim();
+      base.ranking   = (editPoderRanking.value||"").trim();
     }
     if (editTipo.value === "Evento") {
-      base.data = editEventoData.value.trim();
-      base.local = editEventoLocal.value.trim();
+      base.data  = (editEventoData.value||"").trim();
+      base.local = (editEventoLocal.value||"").trim();
+    }
+    if (editTipo.value === "Lore") {
+      base.alvoTipo = editLoreAlvoTipo.value;
+      base.alvoNome = (editLoreAlvoNome.value||"").trim();
+      base.lore     = (editLoreTexto.value||"").trim();
     }
 
     data[editingIndex] = base;
@@ -229,15 +252,15 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    currentFilter = btn.dataset.filter; // all, Reino, Clã, Personagem, Poder, Evento
+    currentFilter = btn.dataset.filter; // all, Reino, Clã, Personagem, Poder, Evento, Lore
     render();
   });
 });
 document.querySelector('.filter-btn[data-filter="all"]').classList.add("active");
 
 // ===== Ordenação =====
-sortSelect.addEventListener("change", () => {
-  currentSort = sortSelect.value; // az | za | recent
+document.getElementById("sort").addEventListener("change", (e) => {
+  currentSort = e.target.value; // az | za | recent
   render();
 });
 
@@ -249,10 +272,10 @@ tipoSelect.addEventListener("change", () => {
 // ===== Adicionar novo item =====
 addForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const nome = document.getElementById("nome").value.trim();
+  const nome = (document.getElementById("nome").value || "").trim();
   const tipo = tipoSelect.value;
-  const resumo = document.getElementById("resumo").value.trim();
-  if (!nome || !tipo) return;
+  const resumo = (document.getElementById("resumo").value || "").trim();
+  if (!nome && tipo !== "Lore") return; // Lore pode não ter “nome” específico
 
   const base = { _ts: Date.now(), nome, tipo, resumo };
 
@@ -269,6 +292,13 @@ addForm.addEventListener("submit", (e) => {
   if (tipo === "Evento") {
     base.data = (addEventoData.value || "").trim();
     base.local = (addEventoLocal.value || "").trim();
+  }
+  if (tipo === "Lore") {
+    base.alvoTipo = addLoreAlvoTipo.value;
+    base.alvoNome = (addLoreAlvoNome.value || "").trim();
+    base.lore     = (addLoreTexto.value || "").trim();
+    // Se “nome” ficou vazio, cria um baseado no alvo
+    if (!base.nome) base.nome = `Lore: ${[base.alvoTipo, base.alvoNome].filter(Boolean).join(" - ")}`;
   }
 
   data.push(base);
@@ -303,10 +333,10 @@ document.getElementById("import-input").addEventListener("change", async (e) => 
       const merged = [...data, ...imported.map(it => ({ _ts: it._ts || Date.now(), ...it }))];
       const seen = new Set();
       data = merged.filter(item => {
-        const key = `${(item.nome||"").trim()}|${(item.tipo||"").trim()}|${(item.resumo||"").trim()}|${(item._ts||0)}`;
+        const key = `${(item.tipo||"")}|${(item.nome||"")}|${(item.alvoTipo||"")}|${(item.alvoNome||"")}|${(item._ts||0)}`;
         if (seen.has(key)) return false;
         seen.add(key);
-        return item && item.nome && item.tipo;
+        return item && (item.tipo) && (item.nome || item.tipo === "Lore");
       });
       saveData();
       render();
